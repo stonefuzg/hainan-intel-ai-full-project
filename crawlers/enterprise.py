@@ -26,25 +26,29 @@ def crawl_enterprises():
         if title:
             site_title = title.get_text().strip()
 
-        # Since real enterprise data is hard to get without APIs,
-        # we'll use real Hainan company names with enhanced data
-        hainan_companies = [
-            "海南航空股份有限公司",
-            "海口美兰国际机场有限公司",
-            "海南省发展控股有限公司",
-            "海南橡胶集团有限公司",
-            "海南矿业股份有限公司",
-            "海南电网有限公司",
-            "中国石化海南炼油化工有限公司",
-            "海南中化集团有限公司",
-            "海南省交通投资控股有限公司",
-            "海南省旅游投资发展有限公司"
-        ]
+        # Try to scan for company names from government pages (e.g. 海南省人民政府)
+        # We look for link text that contains common company markers like "有限公司".
+        companies = []
+        for link in soup.find_all('a', href=True):
+            text = link.get_text().strip()
+            if any(marker in text for marker in ['有限公司', '股份有限公司', '集团有限公司', '控股有限公司']):
+                companies.append(text)
+
+        # Deduplicate and keep a small set
+        companies = list(dict.fromkeys(companies))[:10]
+
+        # If we couldn't find enough real company names, fallback to a small list
+        if not companies:
+            companies = [
+                "海南航空股份有限公司",
+                "海口美兰国际机场有限公司",
+                "海南省发展控股有限公司",
+            ]
 
         industries = ["航空运输", "机场管理", "基础设施", "橡胶种植", "矿业开采", "电力供应", "石油化工", "化工制造", "交通建设", "旅游开发"]
         regions = ["海口市", "三亚市", "儋州市", "琼海市", "文昌市", "万宁市", "东方市", "定安县", "屯昌县", "澄迈县"]
 
-        for i, company_name in enumerate(hainan_companies):
+        for i, company_name in enumerate(companies):
             registration_date = datetime.now() - timedelta(days=random.randint(365, 3650))  # 1-10 years ago
 
             enterprise = {
