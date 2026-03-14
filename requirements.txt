@@ -1,0 +1,11 @@
+
+fastapi
+uvicorn
+requests
+pandas
+sqlalchemy
+psycopg2-binary
+python-dotenv
+moviepy
+streamlit
+schedule
