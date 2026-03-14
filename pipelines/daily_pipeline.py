@@ -1,4 +1,6 @@
 
+from datetime import datetime
+
 from dotenv import load_dotenv
 
 from crawlers.enterprise import crawl_enterprises
@@ -8,8 +10,9 @@ from crawlers.projects import crawl_projects
 from agents.data_agent import DataAgent
 from agents.analysis_agent import AnalysisAgent
 from agents.content_agent import ContentAgent
+from notifications.emailer import send_report
 
-from database.models import Enterprise, Policy, Project, init_db, Base
+from database.models import DailyReport, Enterprise, Policy, Project, init_db, Base
 from database.postgres import get_engine, get_session
 
 
@@ -105,10 +108,51 @@ def run_daily_pipeline():
 
     scripts = content_agent.generate_scripts(summary, analysis)
 
-    print("=== 今日商业情报 ===")
+    # Persist daily report summary
+    report_date = datetime.now().strftime("%Y-%m-%d")
+    previous_report = (
+        session.query(DailyReport)
+        .order_by(DailyReport.created_at.desc())
+        .first()
+    )
+
+    new_enterprises = summary["enterprise_count"] - (previous_report.enterprise_count if previous_report else 0)
+    new_policies = summary["policy_count"] - (previous_report.policy_count if previous_report else 0)
+    new_projects = summary["project_count"] - (previous_report.project_count if previous_report else 0)
+
+    report = DailyReport(
+        report_date=report_date,
+        enterprise_count=summary["enterprise_count"],
+        policy_count=summary["policy_count"],
+        project_count=summary["project_count"],
+        top_industry=analysis.get("top_industry"),
+        top_industry_count=analysis.get("count"),
+        new_enterprises=new_enterprises,
+        new_policies=new_policies,
+        new_projects=new_projects,
+    )
+
+    session.add(report)
+    session.commit()
+
+    text_report = [
+        f"=== 今日商业情报 ({report_date}) ===",
+        f"新增企业：{new_enterprises}（总共 {summary['enterprise_count']} 家）",
+        f"新增政策：{new_policies}（总共 {summary['policy_count']} 条）",
+        f"新增项目：{new_projects}（总共 {summary['project_count']} 个）",
+        f"行业焦点：{analysis.get('top_industry', '未知')}（{analysis.get('count')} 家）",
+        "",
+        "-- 生成脚本：",
+    ]
 
     for s in scripts:
-        print("-", s)
+        text_report.append(f"- {s}")
+
+    report_body = "\n".join(text_report)
+    print(report_body)
+
+    # Send email report if configured
+    send_report(f"海南商业情报日报 - {report_date}", report_body)
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ if ROOT not in sys.path:
 
 import streamlit as st
 
-from database.models import Enterprise, Policy, Project
+from database.models import DailyReport, Enterprise, Policy, Project
 from database.postgres import get_session
 
 
@@ -83,3 +83,21 @@ for p in projects:
         st.write(f"**联系电话**: {p.contact_phone}")
         st.write(f"**项目网站**: {p.project_website}")
         st.write(f"**状态**: {p.status}")
+
+# Report chart
+st.header("日报统计")
+
+reports = session.query(DailyReport).order_by(DailyReport.created_at.desc()).limit(30).all()[::-1]
+if reports:
+    df = {
+        "date": [r.report_date for r in reports],
+        "enterprises": [r.enterprise_count for r in reports],
+        "policies": [r.policy_count for r in reports],
+        "projects": [r.project_count for r in reports],
+        "new_enterprises": [r.new_enterprises for r in reports],
+        "new_policies": [r.new_policies for r in reports],
+        "new_projects": [r.new_projects for r in reports],
+    }
+    st.line_chart(df)
+else:
+    st.write("暂无日报数据")

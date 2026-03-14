@@ -72,6 +72,22 @@ class Project(Base):
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
 
+class DailyReport(Base):
+    __tablename__ = "daily_reports"
+
+    id = Column(Integer, primary_key=True)
+    report_date = Column(String, nullable=False, unique=True)
+    enterprise_count = Column(Integer, nullable=False)
+    policy_count = Column(Integer, nullable=False)
+    project_count = Column(Integer, nullable=False)
+    top_industry = Column(String)
+    top_industry_count = Column(Integer)
+    new_enterprises = Column(Integer)
+    new_policies = Column(Integer)
+    new_projects = Column(Integer)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+
 def init_db(engine):
     """Create database tables if they do not exist."""
     Base.metadata.create_all(engine)

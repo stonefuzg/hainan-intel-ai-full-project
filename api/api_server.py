@@ -112,3 +112,30 @@ def summary(db: Session = Depends(get_db)):
         "policies": db.query(Policy).count(),
         "projects": db.query(Project).count(),
     }
+
+
+@app.get("/reports")
+def reports(limit: int = 10, db: Session = Depends(get_db)):
+    """Return recent daily reports (new counts and top industry)."""
+
+    records = (
+        db.query(DailyReport)
+        .order_by(DailyReport.created_at.desc())
+        .limit(limit)
+        .all()
+    )
+
+    return [
+        {
+            "report_date": r.report_date,
+            "enterprise_count": r.enterprise_count,
+            "policy_count": r.policy_count,
+            "project_count": r.project_count,
+            "new_enterprises": r.new_enterprises,
+            "new_policies": r.new_policies,
+            "new_projects": r.new_projects,
+            "top_industry": r.top_industry,
+            "top_industry_count": r.top_industry_count,
+        }
+        for r in records
+    ]
