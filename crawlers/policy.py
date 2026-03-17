@@ -36,6 +36,12 @@ def crawl_policies():
             except:
                 continue
 
+        # Only use static policies if we successfully parsed from the website
+        # If website scraping failed, return empty list instead of fake data
+        if not policy_titles:
+            print("[政策爬虫信息] 无法从政府网站解析到政策数据，返回空列表")
+            return []
+
         # Use real Hainan policy names with detailed data
         real_policies = [
             {
@@ -88,12 +94,11 @@ def crawl_policies():
         policies = real_policies
 
     except Exception as e:
-        print(f"Error crawling real policy data: {e}")
-        # Fallback to basic simulated data
-        policies = [
-            {"title":"海南税收优惠政策","industry":"综合"},
-            {"title":"跨境电商扶持政策","industry":"电商"},
-            {"title":"旅游高质量发展奖励政策","industry":"旅游"}
-        ]
+        # Log error without returning fake data
+        error_msg = f"[政策爬虫错误] {type(e).__name__}: {str(e)}"
+        print(error_msg)
+        # Import logging if needed for future enhancement
+        # Log to file or monitoring system
+        return []  # Return empty list instead of fake data
 
     return policies

@@ -1,0 +1,41 @@
+{
+  "data_sources": {
+    "enterprises": {
+      "type": "file",
+      "path": "data/enterprises.json",
+      "fallback": "empty",
+      "retry_enabled": true,
+      "retry_count": 3,
+      "retry_delay": 2
+    },
+    "policies": {
+      "type": "file",
+      "path": "data/policies.json",
+      "fallback": "empty",
+      "retry_enabled": true,
+      "retry_count": 3,
+      "retry_delay": 2
+    },
+    "projects": {
+      "type": "file",
+      "path": "data/projects.json",
+      "fallback": "empty",
+      "retry_enabled": true,
+      "retry_count": 3,
+      "retry_delay": 2
+    }
+  },
+  "crawler_settings": {
+    "timeout": 10,
+    "max_retries": 3,
+    "retry_delay": 2,
+    "allowed_fallback_types": [
+      "file",
+      "database",
+      "empty"
+    ]
+  },
+  "notes": {
+    "zh": "配置说明：\n1. type: 数据源类型(file/database/api/empty)\n2. fallback: 如果爬虫失败，使用的备用方案(empty=返回空列表，不使用虚假数据)\n3. retry: 是否启用重试机制\n4. allowed_fallback_types: 允许的可靠数据源类型，不包括虚假/模拟数据"
+  }
+}

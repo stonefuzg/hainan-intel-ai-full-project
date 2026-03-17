@@ -36,6 +36,12 @@ def crawl_projects():
             except:
                 continue
 
+        # Only use static projects if we successfully parsed from the website
+        # If website scraping failed, return empty list instead of fake data
+        if not project_titles:
+            print("[项目爬虫信息] 无法从政府网站解析到项目数据，返回空列表")
+            return []
+
         # Use real Hainan project names with detailed data
         real_projects = [
             {
@@ -100,12 +106,11 @@ def crawl_projects():
         projects = real_projects
 
     except Exception as e:
-        print(f"Error crawling real project data: {e}")
-        # Fallback to basic simulated data
-        projects = [
-            {"name":"产业园建设项目","investment":5000},
-            {"name":"旅游开发项目","investment":3000},
-            {"name":"新能源基地项目","investment":2500}
-        ]
+        # Log error without returning fake data
+        error_msg = f"[项目爬虫错误] {type(e).__name__}: {str(e)}"
+        print(error_msg)
+        # Import logging if needed for future enhancement
+        # Log to file or monitoring system
+        return []  # Return empty list instead of fake data
 
     return projects

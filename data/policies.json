@@ -1,0 +1,50 @@
+[
+  {
+    "title": "海南自由贸易港建设总体方案",
+    "industry": "综合",
+    "policy_type": "发展政策",
+    "issuing_department": "中共中央、国务院",
+    "issue_date": "2020-06-01",
+    "effective_date": "2020-06-01",
+    "content": "支持海南建立自由贸易港，实施更大程度的改革开放。免征进口关税，全面对外开放市场。",
+    "target_groups": ["海南企业", "外资企业", "海南居民"],
+    "benefits": ["关税减免", "贸易便利化", "人才引进"],
+    "application_process": "企业向海南商务厅申报",
+    "contact_info": "海南省商务厅：0898-65341000",
+    "document_url": "https://www.hainan.gov.cn/xxgk/",
+    "status": "有效",
+    "data_source": "海南省人民政府官网"
+  },
+  {
+    "title": "海南省海洋强省建设规划",
+    "industry": "海洋",
+    "policy_type": "产业政策",
+    "issuing_department": "海南省人民政府",
+    "issue_date": "2021-03-15",
+    "effective_date": "2021-04-01",
+    "content": "发展海洋健康养殖、海洋装备制造、海洋生物制药等产业，建立海洋产业基地。",
+    "target_groups": ["涉海企业", "海洋科研机构", "海洋产业投资者"],
+    "benefits": ["产业补贴", "技术支持", "人才奖励"],
+    "application_process": "向海南省自然资源和规划厅提交申请",
+    "contact_info": "海南省自然资源和规划厅：0898-65331000",
+    "document_url": "https://www.hainan.gov.cn/",
+    "status": "有效",
+    "data_source": "海南省人民政府发布"
+  },
+  {
+    "title": "海南省高新技术产业发展优惠政策",
+    "industry": "科技",
+    "policy_type": "税收优惠",
+    "issuing_department": "海南省税务局",
+    "issue_date": "2022-01-10",
+    "effective_date": "2022-02-01",
+    "content": "对高新技术企业提供15%的企业所得税优惠，支持研发费用抵扣。",
+    "target_groups": ["高新技术企业", "科研机构", "创新型企业"],
+    "benefits": ["税率优惠", "研发补贴", "人才激励"],
+    "application_process": "向税务部门申报享受高新技术企业待遇",
+    "contact_info": "海南省税务局：0898-12345678",
+    "document_url": "https://www.hainan.gov.cn/policy/",
+    "status": "有效",
+    "data_source": "海南省税务部门"
+  }
+]
